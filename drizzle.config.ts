@@ -1,16 +1,15 @@
-import type { Config } from 'drizzle-kit';
+import { defineConfig } from 'drizzle-kit';
 
-const DATABASE_URL = process.env.DATABASE_URL;
+if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 
-if (!DATABASE_URL) {
-	throw new Error('No DATABASE_URL env var found');
-}
+export default defineConfig({
+	schema: './src/lib/server/db/schema.ts',
 
-export default {
-	schema: './src/lib/server/schema.ts',
 	dbCredentials: {
-		url: process.env.DATABASE_URL as string
+		url: process.env.DATABASE_URL
 	},
-	dialect: 'postgresql',
-	out: './migrations'
-} satisfies Config;
+
+	verbose: true,
+	strict: true,
+	dialect: 'postgresql'
+});
